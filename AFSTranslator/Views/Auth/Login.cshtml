@@ -1,0 +1,34 @@
+@using AFSTranslator.Entities.Requests
+
+@model LoginRequest
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<h2 class="form-title">Login</h2>
+
+<div class="form-container">
+    <form id="loginForm">
+    @* <form method="post" action="/auth/login"> *@
+    @* <form method="post" action="@Url.Action("Login", "Auth")"> *@
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" />
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" />
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+    </form>
+
+    <div id="loginError" class="error-message" style="display: none;"></div>
+
+
+    <div class="form-footer">
+        <p>Don't have an account? <a href="/auth/registration">Register here</a></p>
+    </div>
+</div>
