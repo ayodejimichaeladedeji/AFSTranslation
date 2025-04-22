@@ -1,8 +1,3 @@
-using AFSTranslator.Entities;
-using AFSTranslator.Entities.Common;
-using AFSTranslator.Interfaces.Services;
-using Newtonsoft.Json;
-
 namespace AFSTranslator.Services
 {
     public class RestService : IRestService

@@ -1,9 +1,3 @@
-using AFSTranslator.Entities;
-using AFSTranslator.Entities.Enums;
-using AFSTranslator.Entities.Common;
-using AFSTranslator.Entities.Responses;
-using AFSTranslator.Interfaces.Services;
-
 namespace AFSTranslator.Services
 {
     public class FunTranslationService : ITranslatorService
@@ -11,13 +5,18 @@ namespace AFSTranslator.Services
         public string Name => "FunTranslation";
         private readonly IRestService _restService;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ITranslationLogService _translationLogService;
+        
         public List<string> Modes => FunTranslationModes.GetNames(typeof(FunTranslationModes)).ToList();
 
 
-        public FunTranslationService(IRestService restService, IConfiguration configuration)
+        public FunTranslationService(IRestService restService, IConfiguration configuration, ITranslationLogService translationLogService, IHttpContextAccessor httpContextAccessor)
         {
             _restService = restService;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
+            _translationLogService = translationLogService;
         }
 
         public async Task<Result<string>> Translate(string mode, string textToTranslate)
@@ -35,11 +34,20 @@ namespace AFSTranslator.Services
 
                 var payload = new { text = textToTranslate };
 
-                apiResult = await _restService.MakeRequest<FunTranslationResponse>(url, ApiType.Post, payload, headers);
+                // apiResult = await _restService.MakeRequest<FunTranslationResponse>(url, ApiType.Post, payload, headers);
 
                 if (apiResult.IsSuccess)
                 {
-                    result.Content = apiResult.Content?.Contents?.Translated;
+                    // result.Content = apiResult.Content?.Contents?.Translated;
+                    result.Content = "apiResult.Content?.Contents?.Translated";
+                    TranslationLog translationLog = new()
+                    {
+                        UserId = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.PrimarySid).Value),
+                        Mode = mode,
+                        OriginalText = textToTranslate,
+                        TranslatedText = result.Content,
+                    };
+                    await _translationLogService.LogTranslation(translationLog);
                 }
                 else
                 {

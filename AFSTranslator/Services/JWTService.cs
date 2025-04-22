@@ -1,10 +1,3 @@
-using System.Text;
-using AFSTranslator.Models;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using AFSTranslator.Interfaces.Services;
-
 namespace AFSTranslator.Services
 {
     public class JWTService : ITokenService

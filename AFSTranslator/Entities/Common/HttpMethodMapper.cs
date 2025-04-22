@@ -1,5 +1,3 @@
-using AFSTranslator.Entities.Common;
-
 namespace AFSTranslator.Entities.Common
 {
     public static class HttpMethodMapper

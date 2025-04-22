@@ -1,9 +1,3 @@
-using Dapper;
-using System.Data;
-using AFSTranslator.Models;
-using Microsoft.Data.SqlClient;
-using AFSTranslator.Interfaces.Repository;
-
 namespace AFSTranslator.Repository
 {
     public class UserRepository : IUserRepository
@@ -15,15 +9,29 @@ namespace AFSTranslator.Repository
             _sqlConnection = sqlConnection;
         }
 
-        public async Task AddAsync(User user)
+        public async Task<bool> AddAsync(User user)
         {
-            await _sqlConnection.ExecuteAsync("sp_RegisterUser", new { user.Username, user.PasswordHash }, commandType: CommandType.StoredProcedure);
+            try
+            {
+                return await _sqlConnection.ExecuteAsync("sp_RegisterUser", new { user.Username, user.PasswordHash }, commandType: CommandType.StoredProcedure) > 0;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while adding the user", ex);
+            }
         }
 
         public async Task<User> GetByUsernameAsync(string username)
         {
-            var response = await _sqlConnection.QueryFirstOrDefaultAsync<User>("sp_GetUserByUsername", new { Username = username }, commandType: CommandType.StoredProcedure);
-            return response;
+            try
+            {  
+                var response = await _sqlConnection.QueryFirstOrDefaultAsync<User>("sp_GetUserByUsername", new { Username = username }, commandType: CommandType.StoredProcedure);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while fetching the user", ex);
+            }
         }
 
         public Task<User> GetByIdAsync(int id)

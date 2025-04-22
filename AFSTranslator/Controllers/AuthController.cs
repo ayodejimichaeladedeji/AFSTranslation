@@ -1,7 +1,7 @@
+using AFSTranslator.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using AFSTranslator.Interfaces.Services;
-using AFSTranslator.Entities.Requests;
 using Microsoft.AspNetCore.Authentication;
 
 namespace AFSTranslator.Controllers
@@ -15,39 +15,15 @@ namespace AFSTranslator.Controllers
             _authService = authService;
         }
 
-        // [HttpGet]
-        // public IActionResult Login()
-        // {
-        //     LoginRequest model = new();
-        //     return View(model);
-        // }
-
         [HttpGet]
         public IActionResult Login()
         {
-            LoginRequest model = new()
-            {
-                Username = string.Empty, // or a default value
-                Password = string.Empty  // or a default value
-            };
+            LoginRequestViewModel model = new();
             return View(model);
         }
 
-        // [HttpPost]
-        // public async Task<IActionResult> Login([FromBody] LoginRequest request)
-        // {
-        //     var result = await _authService.LoginAsync(request.Username!, request.Password!);
-
-        //     if (!result.IsSuccess)
-        //     {
-        //         return Unauthorized(result);
-        //     }
-
-        //     return Ok(result);
-        // }
-
         [HttpPost]
-        public async Task<IActionResult> Login(LoginRequest model)
+        public async Task<IActionResult> Login(LoginRequestViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
@@ -59,17 +35,7 @@ namespace AFSTranslator.Controllers
                 ModelState.AddModelError("", result.ErrorMessage);
                 return View(model);
             }
-
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, model.Username),
-                new Claim("JWT", result.Content!.Token!)
-            };
-
-            var claimsIdentity = new ClaimsIdentity(claims, "MyCookieAuth");
-
-            await HttpContext.SignInAsync("MyCookieAuth", new ClaimsPrincipal(claimsIdentity));
-
+            
             return RedirectToAction("Translate", "Translate");
         }
 
@@ -77,7 +43,7 @@ namespace AFSTranslator.Controllers
         public IActionResult Registration() => View();
 
         [HttpPost]
-        public async Task<IActionResult> Registration(RegistrationRequest request)
+        public async Task<IActionResult> Registration(RegistrationRequestViewModel request)
         {
             var result = await _authService.RegisterAsync(request.Username, request.Password);
 

@@ -1,6 +1,3 @@
-using AFSTranslator.Interfaces.Factory;
-using AFSTranslator.Interfaces.Services;
-
 namespace AFSTranslator.Factory
 {
     public class TranslatorFactory: ITranslatorFactory

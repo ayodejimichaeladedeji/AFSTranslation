@@ -1,11 +1,3 @@
-using AFSTranslator.Services;
-using AFSTranslator.Repository;
-using Microsoft.Data.SqlClient;
-using AFSTranslator.Interfaces.Services;
-using AFSTranslator.Interfaces.Repository;
-using AFSTranslator.Interfaces.Factory;
-using AFSTranslator.Factory;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication("MyCookieAuth")
@@ -42,6 +34,9 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<IRestService, RestService>();
 builder.Services.AddTransient<ITranslatorService, FunTranslationService>();
 builder.Services.AddScoped<ITranslatorFactory, TranslatorFactory>();
+builder.Services.AddScoped<ITranslationLogRepository, TranslationLogRepository>();
+builder.Services.AddScoped<ITranslationLogService, TranslationLogService>();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

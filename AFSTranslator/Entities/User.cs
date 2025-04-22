@@ -6,12 +6,8 @@ namespace AFSTranslator.Models
     {
         public int Id { get; set; }
 
-        // [Required]
-        [StringLength(100)]
         public required string Username { get; set; }
 
-        // [Required]
-        [StringLength(256)]
         public required string PasswordHash { get; set; }
     }
 }

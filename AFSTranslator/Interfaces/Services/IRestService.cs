@@ -1,6 +1,3 @@
-using AFSTranslator.Entities;
-using AFSTranslator.Entities.Common;
-
 namespace AFSTranslator.Interfaces.Services
 {
     public interface IRestService
