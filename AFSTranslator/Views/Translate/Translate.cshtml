@@ -1,0 +1,54 @@
+@{
+    ViewBag.Title = "Translate";
+}
+
+@model TranslateViewModel
+
+<div class="container">
+    <h1 class="title">Translate Text</h1>
+
+    <form id="translationForm" class="form" method="post">
+        <div class="form-group">
+            <label for="textInput">Enter text to translate:</label>
+            <textarea id="textInput" name="textToTranslate" class="input" rows="5" placeholder="Enter text here...">@Model.TextToTranslate</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="translationMode">Select Translation Mode:</label>
+            <select id="translationMode" name="selectedMode" class="input">
+                @foreach (var mode in Model.TranslationModes)
+                {
+                    <option value="@mode" selected="@((mode.ToString() == Model.SelectedMode) ? "selected" : "")">
+                        @mode
+                    </option>
+                }
+            </select>
+        </div>
+
+        @* <div class="form-group">
+            <label for="tool">Select Translation Tool:</label>
+            <select id="tool" name="tool" class="input">
+                @foreach (var tool in Model.Tools)
+                {
+                    <option value="@tool" @(tool == Model.SelectedTool ? "selected" : "")>
+                        @tool
+                    </option>
+                }
+            </select>
+        </div> *@
+
+        <button type="submit" class="button">Translate</button>
+    </form>
+
+    @if (!string.IsNullOrEmpty(Model.TranslatedText))
+    {
+        <div id="result" class="result">
+            <h3>Translated Text:</h3>
+            <p id="translatedText">@Model.TranslatedText</p>
+        </div>
+    }
+    </div>
+
+@section Scripts {
+    <script src="~/js/translate.js"></script>
+}

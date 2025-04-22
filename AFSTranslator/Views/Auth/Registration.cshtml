@@ -8,7 +8,9 @@
 
 <div class="form-container">
     @* <form method="post" action="/auth/register"> *@
-    <form method="post" action="@Url.Action("Registration", "Auth")">
+    @* <form method="post" action="@Url.Action("Registration", "Auth")"> *@
+    @* <form method="post" action="@Url.Action("Registration", "Auth")"> *@
+    <form method="post" asp-action="Registration" asp-controller="Auth">
         <div class="form-group">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" placeholder="Enter your username" />

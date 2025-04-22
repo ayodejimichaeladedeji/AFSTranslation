@@ -1,6 +1,8 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using AFSTranslator.Interfaces.Services;
 using AFSTranslator.Entities.Requests;
+using Microsoft.AspNetCore.Authentication;
 
 namespace AFSTranslator.Controllers
 {
@@ -13,20 +15,62 @@ namespace AFSTranslator.Controllers
             _authService = authService;
         }
 
+        // [HttpGet]
+        // public IActionResult Login()
+        // {
+        //     LoginRequest model = new();
+        //     return View(model);
+        // }
+
         [HttpGet]
-        public IActionResult Login() => View();
+        public IActionResult Login()
+        {
+            LoginRequest model = new()
+            {
+                Username = string.Empty, // or a default value
+                Password = string.Empty  // or a default value
+            };
+            return View(model);
+        }
+
+        // [HttpPost]
+        // public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        // {
+        //     var result = await _authService.LoginAsync(request.Username!, request.Password!);
+
+        //     if (!result.IsSuccess)
+        //     {
+        //         return Unauthorized(result);
+        //     }
+
+        //     return Ok(result);
+        // }
 
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login(LoginRequest model)
         {
-            var result = await _authService.LoginAsync(request.Username!, request.Password!);
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var result = await _authService.LoginAsync(model.Username, model.Password);
 
             if (!result.IsSuccess)
             {
-                return Unauthorized(result);
+                ModelState.AddModelError("", result.ErrorMessage);
+                return View(model);
             }
 
-            return Ok(result);
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, model.Username),
+                new Claim("JWT", result.Content!.Token!)
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, "MyCookieAuth");
+
+            await HttpContext.SignInAsync("MyCookieAuth", new ClaimsPrincipal(claimsIdentity));
+
+            return RedirectToAction("Translate", "Translate");
         }
 
         [HttpGet]

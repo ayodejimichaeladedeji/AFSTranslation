@@ -62,3 +62,4 @@ function signOut() {
     localStorage.removeItem('jwtToken');
     window.location.href = '/Auth/Login';
 }
+

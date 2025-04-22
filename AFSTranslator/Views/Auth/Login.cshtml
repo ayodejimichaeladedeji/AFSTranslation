@@ -1,34 +1,49 @@
 @using AFSTranslator.Entities.Requests
-
 @model LoginRequest
 
 @{
     ViewBag.Title = "Login";
 }
 
-<h2 class="form-title">Login</h2>
+@if (Model != null)
+{
+    <h2 class="form-title">Login</h2>
 
-<div class="form-container">
-    <form id="loginForm">
-    @* <form method="post" action="/auth/login"> *@
-    @* <form method="post" action="@Url.Action("Login", "Auth")"> *@
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" placeholder="Enter your username" />
+    <div class="form-container">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <p>@error.ErrorMessage</p>
+                }
+            </div>
+        }
+
+        <form method="post" asp-action="Login" asp-controller="Auth">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="Username" class="form-control" placeholder="Enter your username" value="@Model.Username" />
+                @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="Password" class="form-control" placeholder="Enter your password" />
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+        </form>
+
+        <div class="form-footer">
+            <p>Don't have an account? <a href="/auth/registration">Register here</a></p>
         </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" />
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Login</button>
-        </div>
-    </form>
-
-    <div id="loginError" class="error-message" style="display: none;"></div>
-
-
-    <div class="form-footer">
-        <p>Don't have an account? <a href="/auth/registration">Register here</a></p>
     </div>
-</div>
+}
+else
+{
+    <p>Error: The model is not initialized properly.</p>
+}

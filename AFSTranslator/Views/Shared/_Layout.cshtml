@@ -23,23 +23,30 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        @* <li class="nav-item">
-                            <a id="logoutButton" class="nav-link text-dark" href="@Url.Action("Logout", "Account")">Logout</a>
-                        </li> *@
-                        <li class="nav-item"></li>
-                            <a id="logoutButton" class="nav-link text-dark" href="javascript:void(0);" onclick="signOut()">Logout</a>
-                        </li>
-                        <li class="nav-item">
-                            <a id="loginButton" class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Login">Sign In</a>
-                        </li>
-                        <li class="nav-item">
-                            <a id="registrationButton" class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Registration">Sign Up</a>
-                        </li>
+
+                        <!-- Check if the user is authenticated -->
+                        @if (User.Identity!.IsAuthenticated)
+                        {
+                            <!-- If authenticated, show the logout link -->
+                            <li class="nav-item">
+                                <a id="logoutButton" class="nav-link text-dark" href="javascript:void(0);" onclick="signOut()">Logout</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <!-- If not authenticated, show the sign in and sign up links -->
+                            <li class="nav-item">
+                                <a id="loginButton" class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Login">Sign In</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="registrationButton" class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Registration">Sign Up</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
-        </header>
+    </header>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
