@@ -2,6 +2,6 @@ namespace AFSTranslator.Interfaces.Repository
 {
     public interface ITranslationLogRepository: IRepository<TranslationLog>
     {
-        Task<IEnumerable<TranslationLog>> GetUserTranslationLogsAsync(int userId);
+        Task<IEnumerable<TranslationLogResponse>> GetUserTranslationLogsAsync(int userId);
     }
 }

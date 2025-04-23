@@ -17,4 +17,4 @@ global using AFSTranslator.Entities.Responses;
 global using AFSTranslator.Interfaces.Factory;
 global using AFSTranslator.Interfaces.Services;
 global using AFSTranslator.Interfaces.Repository;
-global using Microsoft.AspNetCore.Authentication.Cookies;
+global using System.ComponentModel.DataAnnotations;

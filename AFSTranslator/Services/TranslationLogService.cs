@@ -19,11 +19,11 @@ namespace AFSTranslator.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("An error occurred while logging the translation", ex);
+                throw new Exception("An error occurred", ex);
             }
         }
 
-        public async Task<IEnumerable<TranslationLog>> GetUserTranslationLogs(int userId)
+        public async Task<IEnumerable<TranslationLogResponse>> GetUserTranslationLogs(int userId)
         {
             try
             {
@@ -31,7 +31,7 @@ namespace AFSTranslator.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("An error occurred while retrieving the translation logs by user", ex);
+                throw new Exception("An error occurred", ex);
             }
         }
     }

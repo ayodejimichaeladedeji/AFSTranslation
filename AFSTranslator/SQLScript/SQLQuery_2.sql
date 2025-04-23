@@ -35,15 +35,34 @@
 --     FOREIGN KEY (UserId) REFERENCES Users(Id)
 -- );
 
-CREATE OR ALTER PROCEDURE spInsertTranslationLog
-    @OriginalText NVARCHAR(MAX),
-    @TranslatedText NVARCHAR(MAX),
-    @Mode NVARCHAR(50),
-    @UserId INT
-AS
-BEGIN
-    SET NOCOUNT ON;
+-- CREATE OR ALTER PROCEDURE spInsertTranslationLog
+--     @OriginalText NVARCHAR(MAX),
+--     @TranslatedText NVARCHAR(MAX),
+--     @Mode NVARCHAR(50),
+--     @UserId INT
+-- AS
+-- BEGIN
+--     SET NOCOUNT ON;
 
-    INSERT INTO TranslationLogs (OriginalText, TranslatedText, Mode, CreatedAt, UserId)
-    VALUES (@OriginalText, @TranslatedText, @Mode, GETUTCDATE(), @UserId);
-END;
+--     INSERT INTO TranslationLogs (OriginalText, TranslatedText, Mode, CreatedAt, UserId)
+--     VALUES (@OriginalText, @TranslatedText, @Mode, GETUTCDATE(), @UserId);
+-- END;
+
+-- CREATE PROCEDURE spGetTranslationLogsByUser
+--     @UserId INT
+-- AS
+-- BEGIN
+--     SET NOCOUNT ON;
+
+--     SELECT 
+--         Id, OriginalText, TranslatedText, Mode, CreatedAt
+--     FROM 
+--         TranslationLogs
+--     WHERE 
+--         UserId = @UserId
+--     ORDER BY 
+--         CreatedAt DESC;
+-- END;
+
+SELECT * FROM [dbo].TranslationLogs;
+SELECT * FROM [dbo].Users;

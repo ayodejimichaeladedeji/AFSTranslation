@@ -7,9 +7,21 @@
 <h2 class="form-title">Register</h2>
 
 <div class="form-container">
-    @* <form method="post" action="/auth/register"> *@
-    @* <form method="post" action="@Url.Action("Registration", "Auth")"> *@
-    @* <form method="post" action="@Url.Action("Registration", "Auth")"> *@
+    @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <p>@error.ErrorMessage</p>
+                }
+            </div>
+        }
+    @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.ErrorMessage
+            </div>
+        }
     <form method="post" asp-action="Registration" asp-controller="Auth">
         <div class="form-group">
             <label for="username">Username</label>
@@ -24,10 +36,10 @@
         </div>
     </form>
 
-    @if (ViewBag.ErrorMessage != null)
+    @* @if (ViewBag.ErrorMessage != null)
     {
         <div class="error-message">@ViewBag.ErrorMessage</div>
-    }
+    } *@
 
     <div class="form-footer">
         <p>Already have an account? <a href="/auth/login">Login here</a></p>

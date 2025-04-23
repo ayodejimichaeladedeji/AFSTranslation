@@ -5,6 +5,21 @@
 @model TranslateViewModel
 
 <div class="container">
+    @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <p>@error.ErrorMessage</p>
+                }
+            </div>
+        }
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.ErrorMessage
+            </div>
+        }
     <h1 class="title">Translate Text</h1>
 
     <form id="translationForm" class="form" method="post">

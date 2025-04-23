@@ -34,12 +34,11 @@ namespace AFSTranslator.Services
 
                 var payload = new { text = textToTranslate };
 
-                // apiResult = await _restService.MakeRequest<FunTranslationResponse>(url, ApiType.Post, payload, headers);
+                apiResult = await _restService.MakeRequest<FunTranslationResponse>(url, ApiType.Post, payload, headers);
 
                 if (apiResult.IsSuccess)
                 {
-                    // result.Content = apiResult.Content?.Contents?.Translated;
-                    result.Content = "apiResult.Content?.Contents?.Translated";
+                    result.Content = apiResult.Content?.Contents?.Translated;
                     TranslationLog translationLog = new()
                     {
                         UserId = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.PrimarySid).Value),

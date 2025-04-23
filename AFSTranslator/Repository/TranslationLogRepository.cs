@@ -18,20 +18,20 @@ namespace AFSTranslator.Repository
             }
             catch (Exception ex)
             {
-                throw new Exception("An error occurred while logging the translation", ex);
+                throw new Exception("An error occurred", ex);
             }
         }
 
-        public async Task<IEnumerable<TranslationLog>> GetUserTranslationLogsAsync(int userId)
+        public async Task<IEnumerable<TranslationLogResponse>> GetUserTranslationLogsAsync(int userId)
         {
             try
             {
-                IEnumerable<TranslationLog> logs = await _sqlConnection.QueryAsync<TranslationLog>("spGetTranslationLogsByUser", new { UserId = userId }, commandType: CommandType.StoredProcedure);
+                IEnumerable<TranslationLogResponse> logs = await _sqlConnection.QueryAsync<TranslationLogResponse>("spGetTranslationLogsByUser", new { UserId = userId }, commandType: CommandType.StoredProcedure);
                 return logs;
             }
             catch (Exception ex)
             {
-                throw new Exception("An error occurred while fetch the translation logs", ex);
+                throw new Exception("An error occurred", ex);
             }
         }
         

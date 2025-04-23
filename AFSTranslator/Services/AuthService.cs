@@ -15,9 +15,9 @@ namespace AFSTranslator.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<Result<string>> RegisterAsync(string username, string password)
+        public async Task<Result<string>> Register(string username, string password)
         {
-            Result<string> result = new ();
+            Result<string> result = new();
 
             try
             {
@@ -49,12 +49,12 @@ namespace AFSTranslator.Services
             {
                 result.ErrorMessage = $"An error occurred while registering the user: {ex.Message}";
                 return result;
-            }    
+            }
         }
-        
-        public async Task<Result<string>> LoginAsync(string username, string password)
+
+        public async Task<Result<string>> Login(string username, string password)
         {
-            Result<string> result = new ();
+            Result<string> result = new();
 
             try
             {
@@ -92,7 +92,24 @@ namespace AFSTranslator.Services
             {
                 result.ErrorMessage = $"An error occurred while registering the user: {ex.Message}";
                 return result;
-            }    
+            }
+        }
+
+        public async Task<Result<string>> Logout()
+        {
+            Result<string> result = new();
+
+            try
+            {
+                await _httpContextAccessor.HttpContext.SignOutAsync("MyCookieAuth");
+                result.Content = "Logout successful";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.ErrorMessage = $"An error occurred while logging out: {ex.Message}";
+                return result;
+            }
         }
     }
 }

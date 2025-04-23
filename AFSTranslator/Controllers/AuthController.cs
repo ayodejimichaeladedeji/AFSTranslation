@@ -28,32 +28,47 @@ namespace AFSTranslator.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var result = await _authService.LoginAsync(model.Username, model.Password);
+            var result = await _authService.Login(model.Username, model.Password);
 
             if (!result.IsSuccess)
             {
                 ModelState.AddModelError("", result.ErrorMessage);
                 return View(model);
             }
-            
-            return RedirectToAction("Translate", "Translate");
+
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
-        public IActionResult Registration() => View();
+        public IActionResult Registration()
+        {
+            RegistrationRequestViewModel model = new();
+            return View(model);
+        }
 
         [HttpPost]
-        public async Task<IActionResult> Registration(RegistrationRequestViewModel request)
+        public async Task<IActionResult> Registration(RegistrationRequestViewModel model)
         {
-            var result = await _authService.RegisterAsync(request.Username, request.Password);
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var result = await _authService.Register(model.Username, model.Password);
 
             if (!result.IsSuccess)
             {
                 ViewBag.ErrorMessage = result.ErrorMessage;
-                return View(request);
+                return View(model);
             }
 
             return RedirectToAction("Login");
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await _authService.Logout();
+            return RedirectToAction("Login", "Auth");
         }
     }
 }
