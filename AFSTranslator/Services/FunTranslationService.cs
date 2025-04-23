@@ -23,6 +23,19 @@ namespace AFSTranslator.Services
         {
             Result<string> result = new();
 
+            if (string.IsNullOrWhiteSpace(textToTranslate))
+            {
+                result.ErrorMessage = "Text to translate cannot be empty.";
+                return result;
+            }
+
+            if (string.IsNullOrWhiteSpace(mode) || !Modes.Contains(mode, StringComparer.OrdinalIgnoreCase))
+            {
+                result.ErrorMessage = "Invalid translation mode.";
+                return result;
+            }
+
+
             try
             {
                 Result<FunTranslationResponse> apiResult = new();
