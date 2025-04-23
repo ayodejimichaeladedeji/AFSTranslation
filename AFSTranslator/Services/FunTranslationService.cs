@@ -25,13 +25,13 @@ namespace AFSTranslator.Services
 
             if (string.IsNullOrWhiteSpace(textToTranslate))
             {
-                result.ErrorMessage = "Text to translate cannot be empty.";
+                result.ErrorMessage = "Text to translate cannot be empty";
                 return result;
             }
 
             if (string.IsNullOrWhiteSpace(mode) || !Modes.Contains(mode, StringComparer.OrdinalIgnoreCase))
             {
-                result.ErrorMessage = "Invalid translation mode.";
+                result.ErrorMessage = "Invalid translation mode";
                 return result;
             }
 
