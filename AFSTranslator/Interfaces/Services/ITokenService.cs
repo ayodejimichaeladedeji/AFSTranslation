@@ -1,5 +1,3 @@
-using AFSTranslator.Models;
-
 namespace AFSTranslator.Interfaces.Services
 {
     public interface ITokenService

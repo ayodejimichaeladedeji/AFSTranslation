@@ -3,11 +3,21 @@
 }
 
 <div class="home-container">
-    <div class="hero-section">
-        <h1>Welcome to AFSTranslator</h1>
-        <h2 style="color: white;">Your perfect translation solution</h2>
-        <a href="@Url.Action("Login", "Auth")" class="cta-btn">Get Started</a>
-    </div>
+    @if (User.Identity!.IsAuthenticated){
+        <div class="hero-section">
+            <h1>Welcome to AFSTranslator</h1>
+            <h2 style="color: white;">Your perfect translation solution</h2>
+            <a href="@Url.Action("Translate", "translate")" class="cta-btn">Start Translating</a>
+        </div>
+    }
+    else{
+        <div class="hero-section">
+            <h1>Welcome to AFSTranslator</h1>
+            <h2 style="color: white;">Your perfect translation solution</h2>
+            <a href="@Url.Action("Login", "Auth")" class="cta-btn">Get Started</a>
+        </div>
+    }
+    
 
     <div class="features-section">
         <div class="feature">
@@ -39,7 +49,7 @@
         </div>
     </div>
 
-    <div class="footer-section">
+    <div class="footer-section"></div>
         <p>&copy; 2025 AFSTranslator. All rights reserved.</p>
     </div>
 </div>

@@ -1,44 +1,28 @@
-using AFSTranslator.Services;
-using AFSTranslator.Repository;
-using Microsoft.Data.SqlClient;
-using AFSTranslator.Interfaces.Services;
-using AFSTranslator.Interfaces.Repository;
-
 var builder = WebApplication.CreateBuilder(args);
 
-// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication("MyCookieAuth")
+    .AddCookie("MyCookieAuth", options =>
+    {
+        options.Cookie.Name = "AFSTranslatorAuth";
+        options.LoginPath = "/Auth/Login";
+        options.AccessDeniedPath = "/Auth/Login";
+        options.ExpireTimeSpan = TimeSpan.FromHours(1);
+    });
+
+// builder.Services.AddAuthentication("Bearer")
 //     .AddJwtBearer(options =>
 //     {
-//         options.TokenValidationParameters = new TokenValidationParameters
-//         {
-//             ValidateIssuerSigningKey = true,
-//             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt:Key").Value!)),
-
-//             ValidateIssuer = true,
-//             ValidIssuer = builder.Configuration["Jwt:Issuer"],
-
-//             ValidateAudience = true,
-//             ValidAudience = builder.Configuration["Jwt:Audience"],
-
-//             ValidateLifetime = true,
-//             ClockSkew = TimeSpan.Zero
-//         };
+//         options.Authority = builder.Configuration["Jwt:Issuer"];
+//         options.Audience = builder.Configuration["Jwt:Audience"];
+//         options.RequireHttpsMetadata = false;
+//         options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+//             {
+//                 ValidateIssuer = true,
+//                 ValidateAudience = true,
+//                 ValidateLifetime = true,
+//                 ClockSkew = TimeSpan.Zero
+//             };
 //     });
-
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer(options =>
-    {
-        options.Authority = builder.Configuration["Jwt:Issuer"];
-        options.Audience = builder.Configuration["Jwt:Audience"];
-        options.RequireHttpsMetadata = false;
-        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
-            };
-    });
 
 builder.Services.AddControllersWithViews();
 
@@ -46,6 +30,13 @@ builder.Services.AddScoped((s) => new SqlConnection(builder.Configuration.GetCon
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITokenService, JWTService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<IRestService, RestService>();
+builder.Services.AddTransient<ITranslatorService, FunTranslationService>();
+builder.Services.AddScoped<ITranslatorFactory, TranslatorFactory>();
+builder.Services.AddScoped<ITranslationLogRepository, TranslationLogRepository>();
+builder.Services.AddScoped<ITranslationLogService, TranslationLogService>();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -66,11 +57,12 @@ app.UseStatusCodePages(context =>
 {
     if (context.HttpContext.Response.StatusCode == 401)
     {
-        context.HttpContext.Response.Redirect("/Login");
+        context.HttpContext.Response.Redirect("/Auth/Login");
     }
     return Task.CompletedTask;
 });
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
