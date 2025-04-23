@@ -1,0 +1,33 @@
+@using AFSTranslator.Entities.Requests
+@model RegistrationRequest
+@{
+    ViewBag.Title = "Register";
+}
+
+<h2 class="form-title">Register</h2>
+
+<div class="form-container">
+    @* <form method="post" action="/auth/register"> *@
+    <form method="post" action="@Url.Action("Registration", "Auth")">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" />
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" />
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Register</button>
+        </div>
+    </form>
+
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="error-message">@ViewBag.ErrorMessage</div>
+    }
+
+    <div class="form-footer">
+        <p>Already have an account? <a href="/auth/login">Login here</a></p>
+    </div>
+</div>
