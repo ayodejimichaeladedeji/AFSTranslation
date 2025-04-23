@@ -1,13 +1,3 @@
-using Moq;
-using FluentAssertions;
-using AFSTranslator.Models;
-using AFSTranslator.Services;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
-using AFSTranslator.Interfaces.Services;
-using AFSTranslator.Interfaces.Repository;
-using Microsoft.AspNetCore.Authentication;
-
 namespace AFSTranslator.Tests
 {
     public class AuthServiceTests
