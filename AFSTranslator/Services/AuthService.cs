@@ -72,6 +72,12 @@ namespace AFSTranslator.Services
         {
             Result<string> result = new();
 
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            {
+                result.ErrorMessage = "Invalid username or password";
+                return result;
+            }
+
             try
             {
                 var user = await _userRepository.GetByUsernameAsync(username);

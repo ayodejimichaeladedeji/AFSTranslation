@@ -32,17 +32,6 @@ namespace AFSTranslator.Tests
             _service = new FunTranslationService(_restServiceMock.Object, _configMock.Object, _translationLogServiceMock.Object, _httpContextAccessorMock.Object);
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        public async Task Translate_ShouldFail_WhenInputTextIsInvalid(string input)
-        {
-            var result = await _service.Translate("yoda", input);
-
-            result.IsSuccess.Should().BeFalse();
-            result.ErrorMessage.Should().NotBeNullOrWhiteSpace();
-        }
-
         [Fact]
         public async Task Translate_ShouldReturnTranslatedText_AndLogTranslation()
         {
@@ -77,6 +66,32 @@ namespace AFSTranslator.Tests
                 log.OriginalText == _originalText &&
                 log.TranslatedText == _translatedText
             )), Times.Once);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("   ")]
+        public async Task Translate_ShouldFail_WhenInputTextIsNull(string input)
+        {
+            var result = await _service.Translate("LeetSpeak", input);
+
+            result.IsSuccess.Should().BeFalse();
+            result.Content.Should().BeNull();
+            result.ErrorMessage.Should().Be("Text to translate cannot be empty.");
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("wrong-mode")]
+        public async Task Translate_ShouldFail_WhenModeIsInvalid(string mode)
+        {
+            var result = await _service.Translate(mode, "Test input");
+
+            result.IsSuccess.Should().BeFalse();
+            result.Content.Should().BeNull();
+            result.ErrorMessage.Should().Be("Invalid translation mode.");
         }
 
         [Fact]
