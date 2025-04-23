@@ -3,6 +3,7 @@ global using System.Data;
 global using System.Text;
 global using Newtonsoft.Json;
 global using AFSTranslator.Models;
+global using AFSTranslator.Helpers;
 global using AFSTranslator.Factory;
 global using AFSTranslator.Entities;
 global using AFSTranslator.Services;

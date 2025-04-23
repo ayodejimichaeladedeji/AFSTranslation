@@ -1,5 +1,3 @@
-using AFSTranslator.Entities;
-
 namespace AFSTranslator.Interfaces.Services
 {
     public interface ITranslatorService

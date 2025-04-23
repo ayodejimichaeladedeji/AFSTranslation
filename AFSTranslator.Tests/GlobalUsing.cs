@@ -1,0 +1,10 @@
+global using Moq;
+global using FluentAssertions;
+global using AFSTranslator.Models;
+global using AFSTranslator.Services;
+global using System.Security.Claims;
+global using Microsoft.AspNetCore.Http;
+global using AFSTranslator.Interfaces.Services;
+global using Microsoft.Extensions.Configuration;
+global using AFSTranslator.Interfaces.Repository;
+global using Microsoft.AspNetCore.Authentication;

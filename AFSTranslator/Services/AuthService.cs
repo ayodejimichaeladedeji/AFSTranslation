@@ -6,18 +6,26 @@ namespace AFSTranslator.Services
     {
         private readonly ITokenService _tokenService;
         private readonly IUserRepository _userRepository;
+        private readonly IPasswordHasher _passwordHasher;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AuthService(IUserRepository userRepository, ITokenService tokenService, IHttpContextAccessor httpContextAccessor)
+        public AuthService(IUserRepository userRepository, ITokenService tokenService, IHttpContextAccessor httpContextAccessor, IPasswordHasher passwordHasher)
         {
-            _userRepository = userRepository;
             _tokenService = tokenService;
+            _userRepository = userRepository;
+            _passwordHasher = passwordHasher;
             _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Result<string>> Register(string username, string password)
         {
             Result<string> result = new();
+
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            {
+                result.ErrorMessage = "Invalid username or password";
+                return result;
+            }
 
             try
             {
@@ -29,7 +37,15 @@ namespace AFSTranslator.Services
                     return result;
                 }
 
-                var passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
+                // var passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
+
+                var passwordHash = _passwordHasher.Hash(password);
+
+                if (string.IsNullOrWhiteSpace(passwordHash))
+                {
+                    result.ErrorMessage = "An error occurred";
+                    return result;
+                }
 
                 var user = new User { Username = username, PasswordHash = passwordHash };
 
@@ -66,20 +82,23 @@ namespace AFSTranslator.Services
                     return result;
                 }
 
-                if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+                bool verifyPassword = _passwordHasher.Verify(user.PasswordHash, password);
+
+                if (!verifyPassword)
                 {
-                    result.ErrorMessage = "Invalid username or password";
+                    result.ErrorMessage = "Invalid username or passworddde";
                     return result;
                 }
 
-                result.Content = _tokenService.GenerateToken(user);
-                result.Message = "Login successful";
+                // result.Content = _tokenService.GenerateToken(user);
+
+                result.Content = "Login successful";
+                result.Message = "Successful request";
 
                 var claims = new List<Claim>
                 {
                     new(ClaimTypes.PrimarySid, user.Id.ToString()),
-                    new(ClaimTypes.Name, user.Id.ToString()),
-                    new("UserId", result.Content!)
+                    new(ClaimTypes.Name, user.Id.ToString())
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, "MyCookieAuth");

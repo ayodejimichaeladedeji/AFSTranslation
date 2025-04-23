@@ -9,24 +9,10 @@ builder.Services.AddAuthentication("MyCookieAuth")
         options.ExpireTimeSpan = TimeSpan.FromHours(1);
     });
 
-// builder.Services.AddAuthentication("Bearer")
-//     .AddJwtBearer(options =>
-//     {
-//         options.Authority = builder.Configuration["Jwt:Issuer"];
-//         options.Audience = builder.Configuration["Jwt:Audience"];
-//         options.RequireHttpsMetadata = false;
-//         options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-//             {
-//                 ValidateIssuer = true,
-//                 ValidateAudience = true,
-//                 ValidateLifetime = true,
-//                 ClockSkew = TimeSpan.Zero
-//             };
-//     });
-
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped((s) => new SqlConnection(builder.Configuration.GetConnectionString("AFSConnectionString")));
+builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITokenService, JWTService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
